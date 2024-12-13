@@ -1,6 +1,6 @@
 import { useState, useEffect, ChangeEvent } from 'react';
-import { User } from '../types';
-import { useDebounce } from '../hooks';
+import { User } from '~types';
+import { useDebounce } from '~hooks';
 
 const Auth = () => {
   const [user, setUser] = useState<User>({ email: '', password: '' });

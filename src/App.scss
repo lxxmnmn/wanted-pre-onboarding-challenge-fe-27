@@ -1,0 +1,10 @@
+@use 'styles/index' as *;
+
+* {
+  color: $color-black;
+  font-family: $font-family;
+}
+
+body {
+  background-color: $color-background;
+}

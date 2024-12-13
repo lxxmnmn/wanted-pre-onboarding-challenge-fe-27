@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import Auth from './pages/Auth';
-import TodoList from './pages/TodoList';
+import Auth from '~pages/Auth';
+import { TodoList } from '~pages/TodoList';
 
-import './App.css';
+import './App.scss';
 
 function App() {
   return (

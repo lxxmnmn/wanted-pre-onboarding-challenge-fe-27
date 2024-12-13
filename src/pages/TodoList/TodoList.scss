@@ -1,0 +1,64 @@
+@use '../../styles/index' as *;
+
+.todo {
+  display: flex;
+  flex-direction: column;
+  row-gap: 40px;
+  padding: 60px;
+
+  &__header {
+    font-size: $font-size-title;
+    font-weight: $font-weight-extrabold;
+    padding-bottom: 20px;
+    border-bottom: 1px solid $color-medium-gray;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+  }
+
+  &__item {
+    width: 100%;
+    padding: 25px;
+    background-color: $color-primary;
+    border: 0;
+    border-radius: 15px;
+    font-size: $font-size-body;
+    font-weight: $font-weight-regular;
+    text-align: left;
+    cursor: pointer;
+
+    &--selected,
+    &:hover {
+      @extend .todo__item;
+      background-color: $color-secondary;
+    }
+
+    &--new {
+      @extend .todo__item;
+      display: flex;
+      align-items: center;
+      column-gap: 10px;
+      color: $color-medium-gray;
+      background-color: $color-light-gray;
+      border: 2px dashed $color-medium-gray;
+
+      &:hover {
+        color: $color-dark-gray;
+        background-color: $color-medium-gray;
+        border: 2px solid $color-medium-gray;
+        box-shadow: 0 0 8px $color-medium-gray;
+
+        & > svg {
+          fill: $color-dark-gray;
+        }
+      }
+
+      & > svg {
+        fill: $color-medium-gray;
+      }
+    }
+  }
+}

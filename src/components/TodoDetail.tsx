@@ -1,4 +1,4 @@
-import { Todo } from '../types';
+import { Todo } from '~types';
 
 const TodoDetail = (props: { todo: Todo }) => {
   const { title, content, updatedAt } = props.todo;

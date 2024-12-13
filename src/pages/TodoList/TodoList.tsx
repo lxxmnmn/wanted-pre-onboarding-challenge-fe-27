@@ -1,6 +1,10 @@
 import { useState } from 'react';
-import TodoDetail from '../components/TodoDetail';
-import { Todo } from '../types';
+import { AddBoxRounded } from '@mui/icons-material';
+
+import TodoDetail from '~components/TodoDetail';
+import { Todo } from '~types';
+
+import './TodoList.scss';
 
 const data: Todo[] = [
   {
@@ -22,6 +26,10 @@ const data: Todo[] = [
 const TodoList = () => {
   const [selected, setSelected] = useState<string[]>([]);
 
+  const addTask = () => {
+    console.log('Add new task');
+  };
+
   const toggleDetail = (id: string) => {
     setSelected((prev) =>
       prev.includes(id)
@@ -31,12 +39,21 @@ const TodoList = () => {
   };
 
   return (
-    <div>
-      <h1>Todo List</h1>
-      <ul>
+    <div className="todo">
+      <h1 className="todo__header">TO-DO LIST</h1>
+      <ul className="todo__list">
+        <li>
+          <button type="button" className="todo__item--new" onClick={addTask}>
+            <AddBoxRounded />할 일을 추가해 보세요.
+          </button>
+        </li>
         {data.map((value) => (
           <li key={value.id}>
-            <button type="button" onClick={() => toggleDetail(value.id)}>
+            <button
+              type="button"
+              className="todo__item"
+              onClick={() => toggleDetail(value.id)}
+            >
               {value.title}
             </button>
             {selected.includes(value.id) && <TodoDetail todo={value} />}
