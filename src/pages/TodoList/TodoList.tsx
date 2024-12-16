@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { AddBoxRounded } from '@mui/icons-material';
 
-import TodoDetail from '~components/TodoDetail';
+import { TodoDetail } from '~components/TodoDetail';
 import { Todo } from '~types';
 
 import './TodoList.scss';
@@ -24,18 +24,22 @@ const data: Todo[] = [
 ];
 
 const TodoList = () => {
-  const [selected, setSelected] = useState<string[]>([]);
+  const [activeId, setActiveId] = useState<string>('');
+
+  const selectedTodo = useMemo(() => {
+    return data.find((value) => value.id === activeId) || ({} as Todo);
+  }, [activeId]);
 
   const addTask = () => {
     console.log('Add new task');
   };
 
   const toggleDetail = (id: string) => {
-    setSelected((prev) =>
-      prev.includes(id)
-        ? prev.filter((activeId) => activeId !== id)
-        : [...prev, id]
-    );
+    setActiveId((prev) => (prev === id ? '' : id));
+  };
+
+  const closeDetail = () => {
+    setActiveId('');
   };
 
   return (
@@ -51,15 +55,19 @@ const TodoList = () => {
           <li key={value.id}>
             <button
               type="button"
-              className="todo__item"
+              className={`todo__item${value.id === activeId ? '--selected' : ''}`}
               onClick={() => toggleDetail(value.id)}
             >
               {value.title}
             </button>
-            {selected.includes(value.id) && <TodoDetail todo={value} />}
           </li>
         ))}
       </ul>
+      <TodoDetail
+        todo={selectedTodo}
+        isVisible={activeId !== ''}
+        onClose={closeDetail}
+      />
     </div>
   );
 };
