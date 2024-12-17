@@ -1,6 +1,8 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { CircularProgress } from '@mui/material';
 
-import { useDebounce } from '~hooks';
+import { useAuth, useDebounce } from '~hooks';
 import { User } from '~types';
 
 import './Account.scss';
@@ -8,7 +10,9 @@ import './Account.scss';
 const Account = () => {
   const [user, setUser] = useState<User>({ email: '', password: '' });
   const [isFilled, setIsFilled] = useState<boolean>(false);
+  const navigate = useNavigate();
 
+  const { mutateAuth, isPending } = useAuth();
   const debouncedEmail = useDebounce(user.email, 200);
   const debouncedPassword = useDebounce(user.password, 200);
 
@@ -26,8 +30,10 @@ const Account = () => {
     }));
   };
 
-  const login = () => {
-    console.log(user);
+  const login = async (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    const auth = await mutateAuth(user);
+    if (auth?.token) navigate('/');
   };
 
   useEffect(() => {
@@ -63,7 +69,7 @@ const Account = () => {
           disabled={!isFilled}
           onClick={login}
         >
-          로그인
+          {isPending ? <CircularProgress color="inherit" /> : <>로그인</>}
         </button>
       </div>
     </div>
