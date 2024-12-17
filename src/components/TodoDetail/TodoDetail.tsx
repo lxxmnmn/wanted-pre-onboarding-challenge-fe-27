@@ -1,4 +1,3 @@
-// import { useState, useEffect } from 'react';
 import { CloseRounded } from '@mui/icons-material';
 
 import { Todo } from '~types';
@@ -8,6 +7,7 @@ import './TodoDetail.scss';
 interface TodoDetailProps {
   todo: Todo;
   isVisible: boolean;
+  isReadOnly: boolean;
   onClose: () => void;
 }
 
@@ -19,17 +19,12 @@ const TodoDetail = (props: TodoDetailProps) => {
     return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
   };
 
-  // useEffect(() => {
-  //   if (id) setIsOpen(true);
-  //   else setIsOpen(false);
-  // }, []);
-
   return (
     <>
       {props.isVisible && (
         <div className="panel-backdrop" onClick={props.onClose}></div>
       )}
-      <div className={`detail ${props.isVisible ? 'visible' : 'hidden'}`}>
+      <div className={`detail${props.isVisible ? '' : '--hidden'}`}>
         <header>
           <button
             type="button"
@@ -40,11 +35,22 @@ const TodoDetail = (props: TodoDetailProps) => {
           </button>
         </header>
         <article>
-          <h2 className="detail__title">{title}</h2>
-          <p className="detail__content">{content}</p>
+          {props.isReadOnly ? (
+            <>
+              <h2 className="detail__title">{title}</h2>
+              <p className="detail__content">{content}</p>
+            </>
+          ) : (
+            <>
+              <input type="text" className="detail__title" />
+              <textarea className="detail__content" />
+            </>
+          )}
         </article>
         <footer>
-          <span className="detail__updated-at">{formatDate(updatedAt)}</span>
+          {props.isReadOnly && (
+            <span className="detail__updated-at">{formatDate(updatedAt)}</span>
+          )}
         </footer>
       </div>
     </>

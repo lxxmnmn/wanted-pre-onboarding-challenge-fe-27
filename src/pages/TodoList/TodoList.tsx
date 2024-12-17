@@ -25,16 +25,21 @@ const data: Todo[] = [
 
 const TodoList = () => {
   const [activeId, setActiveId] = useState<string>('');
+  const [isReadOnly, setIsReadOnly] = useState<boolean>(true);
 
   const selectedTodo = useMemo(() => {
     return data.find((value) => value.id === activeId) || ({} as Todo);
   }, [activeId]);
 
   const addTask = () => {
-    console.log('Add new task');
+    const uniqueId = crypto.randomUUID();
+
+    setIsReadOnly(false);
+    setActiveId(uniqueId);
   };
 
   const toggleDetail = (id: string) => {
+    setIsReadOnly(true);
     setActiveId((prev) => (prev === id ? '' : id));
   };
 
@@ -66,6 +71,7 @@ const TodoList = () => {
       <TodoDetail
         todo={selectedTodo}
         isVisible={activeId !== ''}
+        isReadOnly={isReadOnly}
         onClose={closeDetail}
       />
     </div>
