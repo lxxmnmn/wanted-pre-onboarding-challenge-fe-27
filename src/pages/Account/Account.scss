@@ -1,0 +1,64 @@
+@use '../../styles/index' as *;
+
+.auth {
+  height: 100%;
+  background-color: $color-dark-gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__container {
+    width: 500px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 50px;
+    border-radius: 30px;
+    background-color: $color-background;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  }
+
+  &__title {
+    font-size: $font-size-title;
+    font-weight: $font-weight-semibold;
+    text-align: center;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__input {
+    outline: 0px none transparent;
+    border: 0;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: $color-light-gray;
+    font-size: $font-size-body;
+    font-weight: $font-weight-regular;
+  }
+
+  &__submit {
+    border: 0;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: $color-primary;
+    color: $color-dark-gray;
+    font-size: $font-size-body;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $color-secondary;
+    }
+
+    &:disabled {
+      background-color: $color-light-gray;
+      color: $color-medium-gray;
+      cursor: not-allowed;
+    }
+  }
+}

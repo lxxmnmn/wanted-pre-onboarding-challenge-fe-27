@@ -1,8 +1,11 @@
 import { useState, useEffect, ChangeEvent } from 'react';
-import { User } from '~types';
-import { useDebounce } from '~hooks';
 
-const Auth = () => {
+import { useDebounce } from '~hooks';
+import { User } from '~types';
+
+import './Account.scss';
+
+const Account = () => {
   const [user, setUser] = useState<User>({ email: '', password: '' });
   const [isFilled, setIsFilled] = useState<boolean>(false);
 
@@ -23,6 +26,10 @@ const Auth = () => {
     }));
   };
 
+  const login = () => {
+    console.log(user);
+  };
+
   useEffect(() => {
     const emailRegex: RegExp =
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -33,28 +40,34 @@ const Auth = () => {
   }, [debouncedEmail, debouncedPassword]);
 
   return (
-    <div>
-      <form>
-        <input
-          type="text"
-          placeholder="이메일 형태로 입력해주세요."
-          onChange={changeEmail}
-        />
-        <input
-          type="password"
-          placeholder="8자 이상 입력해주세요."
-          onChange={changePassword}
-        />
+    <div className="auth">
+      <div className="auth__container">
+        <h1 className="auth__title">시작하기</h1>
+        <form className="auth__form">
+          <input
+            type="text"
+            className="auth__input"
+            placeholder="이메일 형태로 입력해주세요."
+            onChange={changeEmail}
+          />
+          <input
+            type="password"
+            className="auth__input"
+            placeholder="8자 이상 입력해주세요."
+            onChange={changePassword}
+          />
+        </form>
         <button
           type="button"
+          className="auth__submit"
           disabled={!isFilled}
-          onClick={() => console.log(user)}
+          onClick={login}
         >
-          회원 가입
-        </button>{' '}
-      </form>
+          로그인
+        </button>
+      </div>
     </div>
   );
 };
 
-export default Auth;
+export default Account;
