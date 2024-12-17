@@ -5,6 +5,7 @@ import reactPlugin from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import prettierPlugin from 'eslint-plugin-prettier';
+import * as tanstackQuery from '@tanstack/eslint-plugin-query';
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -23,10 +24,12 @@ export default tseslint.config(
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
       prettier: prettierPlugin,
+      '@tanstack/query': tanstackQuery,
     },
     rules: {
       ...reactPlugin.configs.flat.recommended.rules,
       ...reactHooks.configs.recommended.rules,
+      ...tanstackQuery.configs.recommended.rules,
       'react/react-in-jsx-scope': 'off',
     },
   },
