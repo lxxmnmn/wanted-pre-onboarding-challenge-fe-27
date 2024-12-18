@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AuthResponse, TodoResponse, User, Todo } from '~types';
+import { AuthResponse, DataResponse, User, Todo } from '~types';
 
 const apiClient = axios.create({
   baseURL: 'http://localhost:8080',
@@ -14,46 +14,47 @@ const config = {
   },
 };
 
-export const signUp = async (data: User): Promise<AuthResponse> => {
-  const response = await apiClient.post('/users/create', data);
+export const signUp = async (param: User): Promise<AuthResponse> => {
+  const response = await apiClient.post('/users/create', param);
   return response.data;
 };
 
-export const login = async (data: User): Promise<AuthResponse> => {
-  const response = await apiClient.post('/users/login', data);
+export const login = async (param: User): Promise<AuthResponse> => {
+  const response = await apiClient.post('/users/login', param);
   return response.data;
 };
 
-export const getTodos = async (): Promise<TodoResponse> => {
-  const response = await apiClient.get('/todos', config);
-  return response.data;
+export const getTodos = async (): Promise<Todo[]> => {
+  const response = await apiClient.get<DataResponse<Todo[]>>('/todos', config);
+  return response.data.data;
 };
 
-export const getTodoById = async (
-  id: Pick<Todo, 'id'>
-): Promise<TodoResponse> => {
-  const response = await apiClient.get(`/todos/:${id}`, config);
-  return response.data;
+export const getTodoById = async (id: Pick<Todo, 'id'>): Promise<Todo> => {
+  const response = await apiClient.get<DataResponse<Todo>>(
+    `/todos/:${id}`,
+    config
+  );
+  return response.data.data;
 };
 
 export const createTodo = async (
-  data: Pick<Todo, 'title' | 'content'>
-): Promise<TodoResponse> => {
-  const response = await apiClient.post('/todos', data, config);
-  return response.data;
+  param: Pick<Todo, 'title' | 'content'>
+): Promise<DataResponse<Todo>> => {
+  const response = await apiClient.post('/todos', param, config);
+  return response.data.data;
 };
 
 export const updateTodo = async (
   id: Pick<Todo, 'id'>,
-  data: Pick<Todo, 'title' | 'content'>
-): Promise<TodoResponse> => {
-  const response = await apiClient.put(`/todos/:${id}`, data, config);
-  return response.data;
+  param: Pick<Todo, 'title' | 'content'>
+): Promise<DataResponse<Todo>> => {
+  const response = await apiClient.put(`/todos/:${id}`, param, config);
+  return response.data.data;
 };
 
 export const deleteTodo = async (
   id: Pick<Todo, 'id'>
-): Promise<TodoResponse> => {
+): Promise<DataResponse<null>> => {
   const response = await apiClient.delete(`/todos/:${id}`, config);
-  return response.data;
+  return response.data.data;
 };
