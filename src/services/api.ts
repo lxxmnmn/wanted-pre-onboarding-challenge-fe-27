@@ -29,9 +29,9 @@ export const getTodos = async (): Promise<Todo[]> => {
   return response.data.data;
 };
 
-export const getTodoById = async (id: Pick<Todo, 'id'>): Promise<Todo> => {
+export const getTodoById = async (id: string): Promise<Todo> => {
   const response = await apiClient.get<DataResponse<Todo>>(
-    `/todos/:${id}`,
+    `/todos/${id}`,
     config
   );
   return response.data.data;
@@ -45,16 +45,14 @@ export const createTodo = async (
 };
 
 export const updateTodo = async (
-  id: Pick<Todo, 'id'>,
+  id: string,
   param: Pick<Todo, 'title' | 'content'>
 ): Promise<DataResponse<Todo>> => {
-  const response = await apiClient.put(`/todos/:${id}`, param, config);
+  const response = await apiClient.put(`/todos/${id}`, param, config);
   return response.data.data;
 };
 
-export const deleteTodo = async (
-  id: Pick<Todo, 'id'>
-): Promise<DataResponse<null>> => {
-  const response = await apiClient.delete(`/todos/:${id}`, config);
+export const deleteTodo = async (id: string): Promise<DataResponse<null>> => {
+  const response = await apiClient.delete(`/todos/${id}`, config);
   return response.data.data;
 };

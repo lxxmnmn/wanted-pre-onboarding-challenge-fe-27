@@ -1,57 +1,106 @@
+import { useEffect, useState, ChangeEvent } from 'react';
 import { CloseRounded } from '@mui/icons-material';
 
+import { useGetTodoById, useCreateTodo } from '~hooks';
 import { Todo } from '~types';
 
 import './TodoDetail.scss';
 
 interface TodoDetailProps {
-  todo: Todo;
+  id: string;
   isVisible: boolean;
   isReadOnly: boolean;
   onClose: () => void;
 }
 
-const TodoDetail = (props: TodoDetailProps) => {
-  const { title, content, updatedAt } = props.todo;
+const TodoDetail = ({ id, isVisible, isReadOnly, onClose }: TodoDetailProps) => {
+  const [todo, setTodo] = useState<Todo>({
+    title: '',
+    content: '',
+    id: '',
+    createdAt: '',
+    updatedAt: '',
+  });
+  const { data: savedTodo } = useGetTodoById(id, isReadOnly);
+  const { createTodo } = useCreateTodo();
+
+  const changeTitle = (event: ChangeEvent<HTMLInputElement>) => {
+    setTodo((prevTodo) => ({
+      ...prevTodo,
+      title: event.target.value,
+    }));
+  };
+
+  const changeContent = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setTodo((prevTodo) => ({
+      ...prevTodo,
+      content: event.target.value,
+    }));
+  };
+
+  const saveTodo = () => {
+    createTodo({
+      title: todo.title,
+      content: todo.content,
+    });
+  };
 
   const formatDate = (updatedAt: string) => {
     const date = new Date(updatedAt);
     return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
   };
 
+  useEffect(() => {
+    if (savedTodo) setTodo(savedTodo);
+  }, [savedTodo]);
+
   return (
     <>
-      {props.isVisible && (
-        <div className="panel-backdrop" onClick={props.onClose}></div>
-      )}
-      <div className={`detail${props.isVisible ? '' : '--hidden'}`}>
+      {isVisible && <div className="panel-backdrop" onClick={onClose}></div>}
+      <div className={`detail${isVisible ? '' : '--hidden'}`}>
         <header>
-          <button
-            type="button"
-            className="detail__close"
-            onClick={props.onClose}
-          >
+          <button type="button" className="detail__close" onClick={onClose}>
             <CloseRounded />
           </button>
         </header>
-        <article>
-          {props.isReadOnly ? (
-            <>
-              <h2 className="detail__title">{title}</h2>
-              <p className="detail__content">{content}</p>
-            </>
-          ) : (
-            <>
-              <input type="text" className="detail__title" />
-              <textarea className="detail__content" />
-            </>
-          )}
-        </article>
-        <footer>
-          {props.isReadOnly && (
-            <span className="detail__updated-at">{formatDate(updatedAt)}</span>
-          )}
-        </footer>
+        {isReadOnly ? (
+          <>
+            <article>
+              <h2 className="detail__title">{todo.title}</h2>
+              <p className="detail__content">{todo.content}</p>
+            </article>
+            <footer>
+              <span className="detail__updated-at">{formatDate(todo.updatedAt)}</span>
+            </footer>
+          </>
+        ) : (
+          <>
+            <article>
+              <input
+                type="text"
+                className="detail__title"
+                placeholder="TO-DO"
+                onChange={changeTitle}
+              />
+              <textarea className="detail__content" onChange={changeContent} />
+            </article>
+            <footer>
+              <div className="detail__button-box">
+                <button type="button" className="detail__cancel" onClick={onClose}>
+                  취소
+                </button>
+                <button
+                  type="button"
+                  className="detail__save"
+                  disabled={!todo.title || !todo.content}
+                  onClick={saveTodo}
+                >
+                  저장
+                </button>
+              </div>
+            </footer>
+          </>
+        )}
       </div>
     </>
   );

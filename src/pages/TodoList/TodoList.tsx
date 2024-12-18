@@ -1,34 +1,27 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { AddBoxRounded } from '@mui/icons-material';
 
 import { TodoDetail } from '~components/TodoDetail';
-import { useTodos } from '~hooks';
-import { Todo } from '~types';
+import { useGetTodos } from '~hooks';
 
 import './TodoList.scss';
 
 const TodoList = () => {
   const [activeId, setActiveId] = useState<string>('');
-  const [isReadOnly, setIsReadOnly] = useState<boolean>(true);
-  const { data: todos } = useTodos();
-
-  const selectedTodo = useMemo(() => {
-    return todos?.find((value) => value.id === activeId) || ({} as Todo);
-  }, [activeId]);
+  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
+  const { data: todos } = useGetTodos();
 
   const addTask = () => {
-    const uniqueId = crypto.randomUUID();
-
-    setIsReadOnly(false);
-    setActiveId(uniqueId);
+    setIsPanelOpen(true);
   };
 
   const toggleDetail = (id: string) => {
-    setIsReadOnly(true);
     setActiveId((prev) => (prev === id ? '' : id));
+    setIsPanelOpen(!isPanelOpen);
   };
 
   const closeDetail = () => {
+    setIsPanelOpen(false);
     setActiveId('');
   };
 
@@ -54,9 +47,9 @@ const TodoList = () => {
         ))}
       </ul>
       <TodoDetail
-        todo={selectedTodo}
-        isVisible={activeId !== ''}
-        isReadOnly={isReadOnly}
+        id={activeId}
+        isVisible={isPanelOpen}
+        isReadOnly={activeId !== ''}
         onClose={closeDetail}
       />
     </div>
