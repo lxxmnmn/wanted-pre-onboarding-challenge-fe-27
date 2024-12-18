@@ -32,8 +32,6 @@
   }
 
   &__input {
-    outline: 0px none transparent;
-    border: 0;
     border-radius: 10px;
     padding: 10px;
     background-color: $color-light-gray;
@@ -42,14 +40,12 @@
   }
 
   &__submit {
-    border: 0;
     border-radius: 10px;
     padding: 20px;
     background-color: $color-primary;
     color: $color-dark-gray;
     font-size: $font-size-body;
     font-weight: $font-weight-semibold;
-    cursor: pointer;
 
     &:hover {
       background-color: $color-secondary;

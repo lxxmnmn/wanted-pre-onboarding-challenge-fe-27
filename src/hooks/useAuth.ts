@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { login, signUp } from '~services/api';
 import { User } from '~types';
 
-const TOKEN_KEY = 'token';
+// const TOKEN_KEY = 'token';
 
 export const useAuth = () => {
   const loginMutation = useMutation({
@@ -18,7 +18,10 @@ export const useAuth = () => {
       const loginResponse = await loginMutation.mutateAsync(data);
       const { token } = loginResponse;
 
-      if (token) localStorage.setItem(TOKEN_KEY, token);
+      if (token) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('email', data.email);
+      }
 
       return { token, type: 'login' };
     } catch (loginError) {
@@ -26,7 +29,10 @@ export const useAuth = () => {
         const signUpResponse = await signUpMutation.mutateAsync(data);
         const { token } = signUpResponse;
 
-        if (token) localStorage.setItem(TOKEN_KEY, token);
+        if (token) {
+          localStorage.setItem('token', token);
+          localStorage.setItem('email', data.email);
+        }
 
         return { token, type: 'signUp' };
       } catch (signUpError) {

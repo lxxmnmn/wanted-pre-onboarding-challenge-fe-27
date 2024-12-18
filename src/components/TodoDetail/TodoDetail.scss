@@ -48,11 +48,9 @@ $easing-function: ease-in-out;
   &__close {
     width: fit-content;
     height: fit-content;
-    border: 0;
     background-color: transparent;
 
-    & > .MuiSvgIcon-root {
-      cursor: pointer;
+    & > svg {
       fill: $color-dark-gray;
 
       &:hover {
@@ -66,8 +64,6 @@ $easing-function: ease-in-out;
     font-weight: $font-weight-extrabold;
     background-color: transparent;
     padding: 5px;
-    border: 0;
-    outline: 0px none transparent;
   }
 
   input.detail__title {
@@ -85,8 +81,6 @@ $easing-function: ease-in-out;
     background-color: $color-light-gray;
     padding: 20px;
     border-radius: 20px;
-    border: 0;
-    outline: 0px none transparent;
     height: 100%;
     resize: none;
 
@@ -103,14 +97,12 @@ $easing-function: ease-in-out;
 
     & > button {
       width: 150px;
-      border: 0;
       border-radius: 10px;
       padding: 15px;
       background-color: $color-primary;
       color: $color-dark-gray;
       font-size: $font-size-body;
       font-weight: $font-weight-semibold;
-      cursor: pointer;
 
       &:hover {
         background-color: $color-secondary;
