@@ -14,6 +14,7 @@
       "~hooks": ["hooks"],
       "~pages/*": ["pages/*"],
       "~services/*": ["services/*"],
+      "~stores/*": ["stores"],
       "~styles/*": ["styles/*"],
       "~types": ["types"]
     },
