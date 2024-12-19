@@ -33,5 +33,6 @@ export const useCreateTodo = () => {
   return {
     createTodo: mutation.mutateAsync,
     isPending: mutation.isPending,
+    isSuccess: mutation.isSuccess,
   };
 };

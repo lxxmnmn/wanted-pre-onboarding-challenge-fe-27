@@ -16,17 +16,17 @@ const TodoList = () => {
   const userEmail = localStorage.getItem('email');
 
   const addTask = () => {
+    setActiveId('');
     setIsPanelOpen(true);
   };
 
-  const toggleDetail = (id: string) => {
-    setActiveId((prev) => (prev === id ? '' : id));
-    setIsPanelOpen(!isPanelOpen);
+  const openDetail = (id: string) => {
+    setActiveId(id);
+    setIsPanelOpen(true);
   };
 
   const closeDetail = () => {
     setIsPanelOpen(false);
-    setActiveId('');
   };
 
   const logout = () => {
@@ -59,7 +59,7 @@ const TodoList = () => {
               <button
                 type="button"
                 className={`todo__item${value.id === activeId ? '--selected' : ''}`}
-                onClick={() => toggleDetail(value.id)}
+                onClick={() => openDetail(value.id)}
               >
                 {value.title}
               </button>

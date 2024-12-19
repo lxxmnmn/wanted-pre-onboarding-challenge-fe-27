@@ -1,4 +1,5 @@
 import { useEffect, useState, ChangeEvent } from 'react';
+import { CircularProgress } from '@mui/material';
 import { CloseRounded } from '@mui/icons-material';
 
 import { useGetTodoById, useCreateTodo } from '~hooks';
@@ -13,16 +14,18 @@ interface TodoDetailProps {
   onClose: () => void;
 }
 
+const defaultTodo = {
+  title: '',
+  content: '',
+  id: '',
+  createdAt: '',
+  updatedAt: '',
+};
+
 const TodoDetail = ({ id, isVisible, isReadOnly, onClose }: TodoDetailProps) => {
-  const [todo, setTodo] = useState<Todo>({
-    title: '',
-    content: '',
-    id: '',
-    createdAt: '',
-    updatedAt: '',
-  });
+  const [todo, setTodo] = useState<Todo>(defaultTodo);
   const { data: savedTodo } = useGetTodoById(id, isReadOnly);
-  const { createTodo } = useCreateTodo();
+  const { createTodo, isPending, isSuccess } = useCreateTodo();
 
   const changeTitle = (event: ChangeEvent<HTMLInputElement>) => {
     setTodo((prevTodo) => ({
@@ -52,7 +55,12 @@ const TodoDetail = ({ id, isVisible, isReadOnly, onClose }: TodoDetailProps) => 
 
   useEffect(() => {
     if (savedTodo) setTodo(savedTodo);
+    else setTodo(defaultTodo);
   }, [savedTodo]);
+
+  useEffect(() => {
+    if (isSuccess) onClose();
+  }, [isSuccess]);
 
   return (
     <>
@@ -92,10 +100,10 @@ const TodoDetail = ({ id, isVisible, isReadOnly, onClose }: TodoDetailProps) => 
                 <button
                   type="button"
                   className="detail__save"
-                  disabled={!todo.title || !todo.content}
+                  disabled={!todo.title.length || !todo.content.length}
                   onClick={saveTodo}
                 >
-                  저장
+                  {isPending ? <CircularProgress color="inherit" /> : <>저장</>}
                 </button>
               </div>
             </footer>
