@@ -2,14 +2,12 @@ import { useEffect, useState, ChangeEvent } from 'react';
 import { CloseRounded } from '@mui/icons-material';
 
 import { useGetTodoById, useCreateTodo, useUpdateTodo } from '~hooks';
-import { Todo } from '~types';
+import { Todo, TodoState } from '~types';
 
 import './TodoDetail.scss';
 
 interface TodoDetailProps {
-  id: string;
-  isVisible: boolean;
-  isReadOnly: boolean;
+  state: TodoState;
   onClose: () => void;
 }
 
@@ -21,9 +19,11 @@ const defaultTodo = {
   updatedAt: '',
 };
 
-const TodoDetail = ({ id, isVisible, isReadOnly, onClose }: TodoDetailProps) => {
+const TodoDetail = ({ state, onClose }: TodoDetailProps) => {
   const [todo, setTodo] = useState<Todo>(defaultTodo);
-  const { data: savedTodo } = useGetTodoById(id);
+  const { activeId, isReadOnly, showDetail } = state;
+
+  const { data: savedTodo } = useGetTodoById(activeId);
   const { createTodo, isCreateSuccess } = useCreateTodo();
   const { updateTodo, isUpdateSuccess } = useUpdateTodo();
 
@@ -42,9 +42,9 @@ const TodoDetail = ({ id, isVisible, isReadOnly, onClose }: TodoDetailProps) => 
   };
 
   const saveTodo = () => {
-    if (id) {
+    if (activeId) {
       updateTodo({
-        id: id,
+        id: activeId,
         param: {
           title: todo.title,
           content: todo.content,
@@ -74,8 +74,8 @@ const TodoDetail = ({ id, isVisible, isReadOnly, onClose }: TodoDetailProps) => 
 
   return (
     <>
-      {isVisible && <div className="panel-backdrop" onClick={onClose}></div>}
-      <div className={`detail${isVisible ? '' : '--hidden'}`}>
+      {showDetail && <div className="panel-backdrop" onClick={onClose} />}
+      <div className={`detail${showDetail ? '' : '--hidden'}`}>
         <header>
           <button type="button" className="detail__close" onClick={onClose}>
             <CloseRounded />

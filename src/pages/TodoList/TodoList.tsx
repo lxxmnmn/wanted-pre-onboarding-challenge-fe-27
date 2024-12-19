@@ -10,38 +10,47 @@ import {
 
 import { TodoDetail } from '~components/TodoDetail';
 import { useGetTodos } from '~hooks';
+import { TodoState } from '~types';
 
 import './TodoList.scss';
 
 const TodoList = () => {
-  const [activeId, setActiveId] = useState<string>('');
-  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
-  const [isReadOnly, setIsReadOnly] = useState<boolean>(false);
+  const [todoState, setTodoState] = useState<TodoState>({
+    activeId: '',
+    isReadOnly: false,
+    showDetail: false,
+  });
   const navigate = useNavigate();
   const { data: todos } = useGetTodos();
 
   const userEmail = localStorage.getItem('email');
 
   const addTodo = () => {
-    setActiveId('');
-    setIsReadOnly(false);
-    setIsPanelOpen(true);
+    setTodoState({
+      activeId: '',
+      isReadOnly: false,
+      showDetail: true,
+    });
   };
 
   const editTodo = (id: string) => {
-    setActiveId(id);
-    setIsReadOnly(false);
-    setIsPanelOpen(true);
+    setTodoState({
+      activeId: id,
+      isReadOnly: false,
+      showDetail: true,
+    });
   };
 
   const openDetail = (id: string) => {
-    setActiveId(id);
-    setIsReadOnly(true);
-    setIsPanelOpen(true);
+    setTodoState({
+      activeId: id,
+      isReadOnly: true,
+      showDetail: true,
+    });
   };
 
   const closeDetail = () => {
-    setIsPanelOpen(false);
+    setTodoState((prev) => ({ ...prev, showDetail: false }));
   };
 
   const logout = () => {
@@ -71,7 +80,7 @@ const TodoList = () => {
           </li>
           {todos?.map((value) => (
             <li
-              className={`todo__item${isPanelOpen && activeId === value.id ? '--selected' : ''}`}
+              className={`todo__item${todoState.showDetail && todoState.activeId === value.id ? '--selected' : ''}`}
               key={value.id}
             >
               <button type="button" onClick={() => openDetail(value.id)}>
@@ -88,12 +97,7 @@ const TodoList = () => {
             </li>
           ))}
         </ul>
-        <TodoDetail
-          id={activeId}
-          isVisible={isPanelOpen}
-          isReadOnly={isReadOnly}
-          onClose={closeDetail}
-        />
+        <TodoDetail state={todoState} onClose={closeDetail} />
       </section>
     </div>
   );
