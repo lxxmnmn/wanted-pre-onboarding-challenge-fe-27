@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   AccountCircleRounded,
@@ -10,6 +10,7 @@ import {
 
 import { TodoDetail } from '~components/TodoDetail';
 import { useGetTodos, useDeleteTodo } from '~hooks';
+import { setLogout, isTokenExpired } from '~services/auth';
 import { TodoState } from '~types';
 
 import './TodoList.scss';
@@ -58,11 +59,9 @@ const TodoList = () => {
     setTodoState((prev) => ({ ...prev, showDetail: false }));
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('email');
-    navigate('/auth');
-  };
+  useEffect(() => {
+    if (isTokenExpired()) navigate('/auth');
+  }, []);
 
   return (
     <div className="container">
@@ -71,7 +70,7 @@ const TodoList = () => {
           <AccountCircleRounded fontSize="small" />
           {userEmail}
         </p>
-        <button type="button" className="user__logout" onClick={logout}>
+        <button type="button" className="user__logout" onClick={setLogout}>
           <LogoutRounded fontSize="small" />
         </button>
       </header>

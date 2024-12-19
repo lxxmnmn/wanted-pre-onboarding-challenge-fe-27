@@ -1,8 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { login, signUp } from '~services/api';
+import { setLogin } from '~services/auth';
 import { User } from '~types';
-
-// const TOKEN_KEY = 'token';
 
 export const useAuth = () => {
   const loginMutation = useMutation({
@@ -19,8 +18,7 @@ export const useAuth = () => {
       const { token } = loginResponse;
 
       if (token) {
-        localStorage.setItem('token', token);
-        localStorage.setItem('email', data.email);
+        setLogin({ token, email: data.email });
       }
 
       return { token, type: 'login' };
@@ -30,8 +28,7 @@ export const useAuth = () => {
         const { token } = signUpResponse;
 
         if (token) {
-          localStorage.setItem('token', token);
-          localStorage.setItem('email', data.email);
+          setLogin({ token, email: data.email });
         }
 
         return { token, type: 'signUp' };
