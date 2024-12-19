@@ -9,7 +9,7 @@ import {
 } from '@mui/icons-material';
 
 import { TodoDetail } from '~components/TodoDetail';
-import { useGetTodos } from '~hooks';
+import { useGetTodos, useDeleteTodo } from '~hooks';
 import { TodoState } from '~types';
 
 import './TodoList.scss';
@@ -22,6 +22,7 @@ const TodoList = () => {
   });
   const navigate = useNavigate();
   const { data: todos } = useGetTodos();
+  const { deleteTodo } = useDeleteTodo();
 
   const userEmail = localStorage.getItem('email');
 
@@ -39,6 +40,10 @@ const TodoList = () => {
       isReadOnly: false,
       showDetail: true,
     });
+  };
+
+  const removeTodo = (id: string) => {
+    deleteTodo(id);
   };
 
   const openDetail = (id: string) => {
@@ -90,7 +95,7 @@ const TodoList = () => {
                 <button type="button" onClick={() => editTodo(value.id)}>
                   <EditRounded />
                 </button>
-                <button type="button">
+                <button type="button" onClick={() => removeTodo(value.id)}>
                   <DeleteForeverRounded />
                 </button>
               </div>
