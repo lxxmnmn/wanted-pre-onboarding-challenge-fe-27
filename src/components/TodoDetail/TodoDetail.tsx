@@ -1,8 +1,7 @@
 import { useEffect, useState, ChangeEvent } from 'react';
-import { CircularProgress } from '@mui/material';
 import { CloseRounded } from '@mui/icons-material';
 
-import { useGetTodoById, useCreateTodo } from '~hooks';
+import { useGetTodoById, useCreateTodo, useUpdateTodo } from '~hooks';
 import { Todo } from '~types';
 
 import './TodoDetail.scss';
@@ -24,8 +23,9 @@ const defaultTodo = {
 
 const TodoDetail = ({ id, isVisible, isReadOnly, onClose }: TodoDetailProps) => {
   const [todo, setTodo] = useState<Todo>(defaultTodo);
-  const { data: savedTodo } = useGetTodoById(id, isReadOnly);
-  const { createTodo, isPending, isSuccess } = useCreateTodo();
+  const { data: savedTodo } = useGetTodoById(id);
+  const { createTodo, isCreateSuccess } = useCreateTodo();
+  const { updateTodo, isUpdateSuccess } = useUpdateTodo();
 
   const changeTitle = (event: ChangeEvent<HTMLInputElement>) => {
     setTodo((prevTodo) => ({
@@ -42,10 +42,20 @@ const TodoDetail = ({ id, isVisible, isReadOnly, onClose }: TodoDetailProps) => 
   };
 
   const saveTodo = () => {
-    createTodo({
-      title: todo.title,
-      content: todo.content,
-    });
+    if (id) {
+      updateTodo({
+        id: id,
+        param: {
+          title: todo.title,
+          content: todo.content,
+        },
+      });
+    } else {
+      createTodo({
+        title: todo.title,
+        content: todo.content,
+      });
+    }
   };
 
   const formatDate = (updatedAt: string) => {
@@ -59,8 +69,8 @@ const TodoDetail = ({ id, isVisible, isReadOnly, onClose }: TodoDetailProps) => 
   }, [savedTodo]);
 
   useEffect(() => {
-    if (isSuccess) onClose();
-  }, [isSuccess]);
+    if (isCreateSuccess || isUpdateSuccess) onClose();
+  }, [isCreateSuccess, isUpdateSuccess]);
 
   return (
     <>
@@ -88,9 +98,10 @@ const TodoDetail = ({ id, isVisible, isReadOnly, onClose }: TodoDetailProps) => 
                 type="text"
                 className="detail__title"
                 placeholder="TO-DO"
+                value={todo.title}
                 onChange={changeTitle}
               />
-              <textarea className="detail__content" onChange={changeContent} />
+              <textarea className="detail__content" value={todo.content} onChange={changeContent} />
             </article>
             <footer>
               <div className="detail__button-box">
@@ -103,7 +114,7 @@ const TodoDetail = ({ id, isVisible, isReadOnly, onClose }: TodoDetailProps) => 
                   disabled={!todo.title.length || !todo.content.length}
                   onClick={saveTodo}
                 >
-                  {isPending ? <CircularProgress color="inherit" /> : <>저장</>}
+                  저장
                 </button>
               </div>
             </footer>

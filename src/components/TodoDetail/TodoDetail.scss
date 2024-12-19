@@ -11,7 +11,7 @@ $easing-function: ease-in-out;
   width: $panel-width;
   height: 100%;
   background-color: $color-white;
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: -2px 0 10px $color-medium-gray;
   z-index: 10;
   transform: translateX(-$panel-width);
   transition: transform $animation-duration $easing-function;

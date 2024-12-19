@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AccountCircleRounded, LogoutRounded, AddBoxRounded } from '@mui/icons-material';
+import {
+  AccountCircleRounded,
+  LogoutRounded,
+  AddBoxRounded,
+  EditRounded,
+  DeleteForeverRounded,
+} from '@mui/icons-material';
 
 import { TodoDetail } from '~components/TodoDetail';
 import { useGetTodos } from '~hooks';
@@ -10,18 +16,27 @@ import './TodoList.scss';
 const TodoList = () => {
   const [activeId, setActiveId] = useState<string>('');
   const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
+  const [isReadOnly, setIsReadOnly] = useState<boolean>(false);
   const navigate = useNavigate();
   const { data: todos } = useGetTodos();
 
   const userEmail = localStorage.getItem('email');
 
-  const addTask = () => {
+  const addTodo = () => {
     setActiveId('');
+    setIsReadOnly(false);
+    setIsPanelOpen(true);
+  };
+
+  const editTodo = (id: string) => {
+    setActiveId(id);
+    setIsReadOnly(false);
     setIsPanelOpen(true);
   };
 
   const openDetail = (id: string) => {
     setActiveId(id);
+    setIsReadOnly(true);
     setIsPanelOpen(true);
   };
 
@@ -49,27 +64,34 @@ const TodoList = () => {
       <section className="todo">
         <h1 className="todo__header">TO-DO LIST</h1>
         <ul className="todo__list">
-          <li>
-            <button type="button" className="todo__item--new" onClick={addTask}>
+          <li className="todo__item--new">
+            <button type="button" onClick={addTodo}>
               <AddBoxRounded />할 일을 추가해 보세요.
             </button>
           </li>
           {todos?.map((value) => (
-            <li key={value.id}>
-              <button
-                type="button"
-                className={`todo__item${value.id === activeId ? '--selected' : ''}`}
-                onClick={() => openDetail(value.id)}
-              >
+            <li
+              className={`todo__item${isPanelOpen && activeId === value.id ? '--selected' : ''}`}
+              key={value.id}
+            >
+              <button type="button" onClick={() => openDetail(value.id)}>
                 {value.title}
               </button>
+              <div className="todo__button-box">
+                <button type="button" onClick={() => editTodo(value.id)}>
+                  <EditRounded />
+                </button>
+                <button type="button">
+                  <DeleteForeverRounded />
+                </button>
+              </div>
             </li>
           ))}
         </ul>
         <TodoDetail
           id={activeId}
           isVisible={isPanelOpen}
-          isReadOnly={activeId !== ''}
+          isReadOnly={isReadOnly}
           onClose={closeDetail}
         />
       </section>

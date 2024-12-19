@@ -30,29 +30,24 @@ export const getTodos = async (): Promise<Todo[]> => {
 };
 
 export const getTodoById = async (id: string): Promise<Todo> => {
-  const response = await apiClient.get<DataResponse<Todo>>(
-    `/todos/${id}`,
-    config
-  );
+  const response = await apiClient.get<DataResponse<Todo>>(`/todos/${id}`, config);
   return response.data.data;
 };
 
-export const createTodo = async (
-  param: Pick<Todo, 'title' | 'content'>
-): Promise<DataResponse<Todo>> => {
-  const response = await apiClient.post('/todos', param, config);
+export const createTodo = async (param: Pick<Todo, 'title' | 'content'>): Promise<Todo> => {
+  const response = await apiClient.post<DataResponse<Todo>>('/todos', param, config);
   return response.data.data;
 };
 
 export const updateTodo = async (
   id: string,
   param: Pick<Todo, 'title' | 'content'>
-): Promise<DataResponse<Todo>> => {
-  const response = await apiClient.put(`/todos/${id}`, param, config);
+): Promise<Todo> => {
+  const response = await apiClient.put<DataResponse<Todo>>(`/todos/${id}`, param, config);
   return response.data.data;
 };
 
-export const deleteTodo = async (id: string): Promise<DataResponse<null>> => {
-  const response = await apiClient.delete(`/todos/${id}`, config);
+export const deleteTodo = async (id: string): Promise<null> => {
+  const response = await apiClient.delete<DataResponse<null>>(`/todos/${id}`, config);
   return response.data.data;
 };
