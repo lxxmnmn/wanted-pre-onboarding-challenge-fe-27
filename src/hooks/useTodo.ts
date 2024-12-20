@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getTodos, getTodoById, createTodo, updateTodo, deleteTodo } from '~services/api';
+import { isTokenExpired } from '~services/auth';
 import { Todo } from '~types';
 
 interface TodoMutationProps {
@@ -11,6 +12,7 @@ export const useGetTodos = () => {
   return useQuery<Todo[]>({
     queryKey: ['todos'],
     queryFn: getTodos,
+    enabled: !isTokenExpired(),
   });
 };
 

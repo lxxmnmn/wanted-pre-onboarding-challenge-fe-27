@@ -75,7 +75,7 @@ const TodoList = () => {
           <AccountCircleRounded fontSize="small" />
           {getEmail()}
         </p>
-        <button type="button" className="user__logout" onClick={setLogout}>
+        <button type="button" className="user__logout" onClick={() => setLogout}>
           <LogoutRounded fontSize="small" />
         </button>
       </header>
