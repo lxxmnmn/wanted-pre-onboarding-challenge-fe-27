@@ -2,7 +2,10 @@ import { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 
+import { TOAST } from '~constants';
 import { useAuth, useDebounce } from '~hooks';
+import { isTokenExpired } from '~services/auth';
+import { useToastStore } from '~stores';
 import { User } from '~types';
 
 import './Account.scss';
@@ -11,6 +14,7 @@ const Account = () => {
   const [user, setUser] = useState<User>({ email: '', password: '' });
   const [isFilled, setIsFilled] = useState<boolean>(false);
   const navigate = useNavigate();
+  const { setMessage } = useToastStore();
 
   const { mutateAuth, isPending } = useAuth();
   const debouncedEmail = useDebounce(user.email, 200);
@@ -37,13 +41,18 @@ const Account = () => {
   };
 
   useEffect(() => {
-    const emailRegex: RegExp =
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const isValid =
-      emailRegex.test(debouncedEmail) && debouncedPassword.length >= 8;
+    const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const isValid = emailRegex.test(debouncedEmail) && debouncedPassword.length >= 8;
 
     setIsFilled(isValid);
   }, [debouncedEmail, debouncedPassword]);
+
+  useEffect(() => {
+    if (!isTokenExpired()) {
+      setMessage(TOAST.INFO, '토큰이 존재해요.');
+      navigate('/');
+    }
+  }, []);
 
   return (
     <div className="auth">
@@ -63,12 +72,7 @@ const Account = () => {
             onChange={changePassword}
           />
         </form>
-        <button
-          type="button"
-          className="auth__submit"
-          disabled={!isFilled}
-          onClick={login}
-        >
+        <button type="button" className="auth__submit" disabled={!isFilled} onClick={login}>
           {isPending ? <CircularProgress color="inherit" /> : <>로그인</>}
         </button>
       </div>

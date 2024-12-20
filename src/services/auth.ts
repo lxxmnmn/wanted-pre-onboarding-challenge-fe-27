@@ -16,3 +16,7 @@ export const setLogout = () => {
 export const isTokenExpired = (): boolean => {
   return !localStorage.getItem(TOKEN_KEY);
 };
+
+export const getEmail = (): string => {
+  return localStorage.getItem(EMAIL_KEY) || '';
+};

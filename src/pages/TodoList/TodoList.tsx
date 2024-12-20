@@ -9,8 +9,10 @@ import {
 } from '@mui/icons-material';
 
 import { TodoDetail } from '~components/TodoDetail';
+import { TOAST } from '~constants';
 import { useGetTodos, useDeleteTodo } from '~hooks';
-import { setLogout, isTokenExpired } from '~services/auth';
+import { setLogout, isTokenExpired, getEmail } from '~services/auth';
+import { useToastStore } from '~stores';
 import { TodoState } from '~types';
 
 import './TodoList.scss';
@@ -22,10 +24,10 @@ const TodoList = () => {
     showDetail: false,
   });
   const navigate = useNavigate();
+  const { setMessage } = useToastStore();
+
   const { data: todos } = useGetTodos();
   const { deleteTodo } = useDeleteTodo();
-
-  const userEmail = localStorage.getItem('email');
 
   const addTodo = () => {
     setTodoState({
@@ -60,7 +62,10 @@ const TodoList = () => {
   };
 
   useEffect(() => {
-    if (isTokenExpired()) navigate('/auth');
+    if (isTokenExpired()) {
+      setMessage(TOAST.ERROR, '토큰이 유효하지 않아요.');
+      navigate('/auth');
+    }
   }, []);
 
   return (
@@ -68,7 +73,7 @@ const TodoList = () => {
       <header className="user">
         <p className="user__name">
           <AccountCircleRounded fontSize="small" />
-          {userEmail}
+          {getEmail()}
         </p>
         <button type="button" className="user__logout" onClick={setLogout}>
           <LogoutRounded fontSize="small" />

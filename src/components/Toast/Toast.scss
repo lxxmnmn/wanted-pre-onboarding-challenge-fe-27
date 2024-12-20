@@ -1,0 +1,14 @@
+@use '../../styles/index' as *;
+
+.toast {
+  & > .MuiAlert-root {
+    border-radius: 10px;
+    background-color: $color-white;
+    font-weight: $font-weight-light;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+
+    svg {
+      fill: $color-primary;
+    }
+  }
+}
