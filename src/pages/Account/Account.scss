@@ -31,12 +31,17 @@
     gap: 20px;
   }
 
-  &__input {
-    border-radius: 10px;
-    padding: 10px;
-    background-color: $color-light-gray;
-    font-size: $font-size-body;
-    font-weight: $font-weight-regular;
+  &__field {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    & > label {
+      flex-basis: 100px;
+      font-size: $font-size-body;
+      font-weight: $font-weight-semibold;
+    }
   }
 
   &__submit {
@@ -56,5 +61,26 @@
       color: $color-medium-gray;
       cursor: not-allowed;
     }
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: auto;
+
+  &__input {
+    border-radius: 10px;
+    padding: 10px;
+    background-color: $color-light-gray;
+    font-size: $font-size-body;
+    font-weight: $font-weight-regular;
+  }
+
+  &__error {
+    color: $color-primary;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-light;
   }
 }

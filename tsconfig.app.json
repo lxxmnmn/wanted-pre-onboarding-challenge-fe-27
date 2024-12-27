@@ -14,6 +14,7 @@
       "~constants": ["constants"],
       "~hooks": ["hooks"],
       "~pages/*": ["pages/*"],
+      "~schema": ["schema"],
       "~services/*": ["services/*"],
       "~stores": ["stores"],
       "~styles/*": ["styles/*"],
